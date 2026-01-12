@@ -36,7 +36,7 @@ export default function Home({ partidos, noticias, goleadores }: HomeProps) {
       <section className={styles.hero}>
         <div className={styles.heroContent}>
           <h1 className={styles.heroTitle}>
-            Torneo Ex Alumnos
+            Torneo Ex Alumnos Colegio FPB
             <span className={styles.heroYear}>2026</span>
           </h1>
           <p className={styles.heroSubtitle}>
