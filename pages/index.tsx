@@ -27,7 +27,7 @@ export default function Home({ partidos, noticias, goleadores }: HomeProps) {
   return (
     <>
       <Head>
-        <title>Torneo Ex Alumnos 2026</title>
+        <title>Torneo Ex Alumnos Colegio FPB 2026</title>
         <meta name="description" content="Torneo de fútbol de ex alumnos - Resultados, posiciones, goleadores y más" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
