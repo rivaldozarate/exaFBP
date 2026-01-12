@@ -1,0 +1,301 @@
+.header {
+  background: var(--gradient-primary);
+  padding: var(--spacing-xl) 0 var(--spacing-lg);
+  color: var(--color-white);
+  text-align: center;
+}
+
+.title {
+  font-size: 3rem;
+  margin-bottom: var(--spacing-xs);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.subtitle {
+  font-size: 1.2rem;
+  opacity: 0.9;
+}
+
+.filtros {
+  display: flex;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-lg);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.filtroBtn {
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--color-white);
+  color: var(--color-dark);
+  border: 2px solid var(--color-gray);
+  border-radius: var(--radius-md);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.filtroBtn:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  transform: translateY(-2px);
+}
+
+.filtroActivo {
+  background: var(--gradient-primary);
+  color: var(--color-white);
+  border-color: var(--color-primary);
+}
+
+.filtroActivo:hover {
+  color: var(--color-white);
+}
+
+.tableContainer {
+  overflow-x: auto;
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table thead {
+  background: var(--gradient-dark);
+  color: var(--color-white);
+}
+
+.table th {
+  padding: var(--spacing-md);
+  text-align: left;
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+.thPos {
+  width: 60px;
+  text-align: center;
+}
+
+.thEquipo {
+  min-width: 250px;
+}
+
+.thCenter {
+  text-align: center;
+  width: 60px;
+}
+
+.thPts {
+  width: 80px;
+  text-align: center;
+}
+
+.row {
+  border-bottom: 1px solid var(--color-gray);
+  transition: all var(--transition-fast);
+}
+
+.row:hover {
+  background: rgba(0, 188, 212, 0.05);
+}
+
+.rowClasificado {
+  background: rgba(0, 188, 212, 0.08);
+  border-left: 4px solid var(--color-secondary);
+}
+
+.rowClasificado:hover {
+  background: rgba(0, 188, 212, 0.12);
+}
+
+.table td {
+  padding: var(--spacing-md);
+}
+
+.tdPos {
+  text-align: center;
+}
+
+.posicion {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: var(--color-gray);
+  border-radius: 50%;
+  font-weight: 700;
+  color: var(--color-dark);
+}
+
+.rowClasificado .posicion {
+  background: var(--gradient-primary);
+  color: var(--color-white);
+}
+
+.tdEquipo {
+  font-weight: 600;
+}
+
+.equipoInfo {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.logo {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.equipoNombre {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.nombre {
+  color: var(--color-dark);
+  font-size: 1rem;
+}
+
+.grupo {
+  color: var(--color-gray-dark);
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.tdCenter {
+  text-align: center;
+  color: var(--color-gray-dark);
+  font-weight: 500;
+}
+
+.dgPositivo {
+  color: #4CAF50;
+  font-weight: 700;
+}
+
+.dgNegativo {
+  color: #F44336;
+  font-weight: 700;
+}
+
+.tdPts {
+  text-align: center;
+}
+
+.puntos {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 50px;
+  padding: 6px 12px;
+  background: var(--gradient-primary);
+  color: var(--color-white);
+  border-radius: var(--radius-md);
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.leyenda {
+  background: var(--color-white);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.leyendaItem {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font-size: 0.95rem;
+  color: var(--color-dark);
+}
+
+.cuadroClasificado {
+  width: 24px;
+  height: 24px;
+  background: rgba(0, 188, 212, 0.3);
+  border-left: 4px solid var(--color-secondary);
+  border-radius: 4px;
+}
+
+.leyendaTexto {
+  color: var(--color-gray-dark);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.leyendaTexto strong {
+  color: var(--color-dark);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .title {
+    font-size: 2rem;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+  }
+
+  .filtros {
+    justify-content: flex-start;
+  }
+
+  .filtroBtn {
+    font-size: 0.9rem;
+    padding: var(--spacing-xs) var(--spacing-sm);
+  }
+
+  .table {
+    font-size: 0.85rem;
+  }
+
+  .table th,
+  .table td {
+    padding: var(--spacing-xs) var(--spacing-xs);
+  }
+
+  .thEquipo {
+    min-width: 180px;
+  }
+
+  .logo {
+    width: 30px;
+    height: 30px;
+  }
+
+  .nombre {
+    font-size: 0.9rem;
+  }
+
+  .grupo {
+    font-size: 0.75rem;
+  }
+
+  .puntos {
+    min-width: 40px;
+    padding: 4px 8px;
+    font-size: 1rem;
+  }
+
+  .leyenda {
+    font-size: 0.85rem;
+  }
+}

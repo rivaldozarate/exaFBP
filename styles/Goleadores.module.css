@@ -1,0 +1,385 @@
+.header {
+  background: var(--gradient-primary);
+  padding: var(--spacing-xl) 0 var(--spacing-lg);
+  color: var(--color-white);
+  text-align: center;
+}
+
+.title {
+  font-size: 3rem;
+  margin-bottom: var(--spacing-xs);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.subtitle {
+  font-size: 1.2rem;
+  opacity: 0.9;
+}
+
+/* Podio */
+.podio {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-xl);
+  flex-wrap: wrap;
+}
+
+.podioCard {
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-md);
+  text-align: center;
+  box-shadow: var(--shadow-lg);
+  transition: all var(--transition-normal);
+  position: relative;
+  min-width: 250px;
+  border: 3px solid transparent;
+}
+
+.podio1 {
+  border-color: #FFD700;
+  transform: scale(1.1);
+  z-index: 3;
+}
+
+.podio2 {
+  border-color: #C0C0C0;
+  z-index: 2;
+}
+
+.podio3 {
+  border-color: #CD7F32;
+  z-index: 1;
+}
+
+.podioCard:hover {
+  transform: translateY(-8px) scale(1.05);
+}
+
+.podio1:hover {
+  transform: translateY(-8px) scale(1.15);
+}
+
+.medalla {
+  font-size: 3rem;
+  position: absolute;
+  top: -20px;
+  right: 10px;
+  animation: bounce 2s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.podioFotoContainer {
+  margin: var(--spacing-md) 0;
+}
+
+.podioFoto {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 5px solid var(--color-primary);
+  box-shadow: var(--shadow-md);
+}
+
+.podio1 .podioFoto {
+  border-color: #FFD700;
+  width: 140px;
+  height: 140px;
+}
+
+.podioNombre {
+  font-size: 1.3rem;
+  color: var(--color-dark);
+  margin-bottom: var(--spacing-xs);
+}
+
+.podioEquipo {
+  color: var(--color-gray-dark);
+  font-size: 0.95rem;
+  margin-bottom: var(--spacing-sm);
+}
+
+.podioGoles {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
+  margin-top: var(--spacing-sm);
+}
+
+.golesIcon {
+  font-size: 1.8rem;
+}
+
+.golesNumero {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--color-primary);
+}
+
+/* Tabla */
+.tableContainer {
+  overflow-x: auto;
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table thead {
+  background: var(--gradient-dark);
+  color: var(--color-white);
+}
+
+.table th {
+  padding: var(--spacing-md);
+  text-align: left;
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+.thPos {
+  width: 70px;
+  text-align: center;
+}
+
+.thJugador {
+  min-width: 250px;
+}
+
+.thCenter {
+  text-align: center;
+  width: 100px;
+}
+
+.thEquipo {
+  min-width: 200px;
+}
+
+.row {
+  border-bottom: 1px solid var(--color-gray);
+  transition: all var(--transition-fast);
+}
+
+.row:hover {
+  background: rgba(0, 188, 212, 0.05);
+}
+
+.rowDestacado {
+  background: rgba(255, 215, 0, 0.08);
+}
+
+.rowDestacado:hover {
+  background: rgba(255, 215, 0, 0.15);
+}
+
+.table td {
+  padding: var(--spacing-md);
+}
+
+.tdPos {
+  text-align: center;
+}
+
+.posicion {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: var(--color-gray);
+  border-radius: 50%;
+  font-weight: 700;
+  color: var(--color-dark);
+}
+
+.rowDestacado .posicion {
+  background: var(--gradient-primary);
+  color: var(--color-white);
+}
+
+.tdJugador {
+  font-weight: 600;
+}
+
+.jugadorInfo {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.foto {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--color-gray);
+  flex-shrink: 0;
+}
+
+.rowDestacado .foto {
+  border-color: var(--color-secondary);
+}
+
+.nombre {
+  color: var(--color-dark);
+  font-size: 1rem;
+}
+
+.tdCenter {
+  text-align: center;
+  color: var(--color-gray-dark);
+  font-weight: 500;
+}
+
+.numero {
+  background: var(--color-gray);
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+  color: var(--color-dark);
+  font-size: 0.9rem;
+}
+
+.tdEquipo {
+  color: var(--color-dark);
+  font-weight: 500;
+}
+
+.golesCell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.golesIconSmall {
+  font-size: 1.2rem;
+}
+
+.golesCount {
+  min-width: 30px;
+}
+
+/* Estadísticas */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-lg);
+}
+
+.statCard {
+  background: linear-gradient(135deg, var(--color-white) 0%, rgba(0, 188, 212, 0.05) 100%);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  text-align: center;
+  border-left: 4px solid var(--color-secondary);
+  transition: all var(--transition-normal);
+}
+
+.statCard:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.statNumber {
+  font-size: 3rem;
+  font-weight: 800;
+  color: var(--color-primary);
+  line-height: 1;
+  margin-bottom: var(--spacing-xs);
+}
+
+.statLabel {
+  font-size: 1rem;
+  color: var(--color-gray-dark);
+  font-weight: 600;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .title {
+    font-size: 2rem;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+  }
+
+  .podio {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .podioCard {
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .podio1,
+  .podio2,
+  .podio3 {
+    transform: scale(1) !important;
+    order: initial !important;
+  }
+
+  .podio1:hover,
+  .podio2:hover,
+  .podio3:hover {
+    transform: scale(1.05) !important;
+  }
+
+  .table {
+    font-size: 0.85rem;
+  }
+
+  .table th,
+  .table td {
+    padding: var(--spacing-xs);
+  }
+
+  .thJugador,
+  .thEquipo {
+    min-width: 150px;
+  }
+
+  .foto {
+    width: 40px;
+    height: 40px;
+  }
+
+  .nombre {
+    font-size: 0.9rem;
+  }
+
+  .stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .statNumber {
+    font-size: 2.5rem;
+  }
+}

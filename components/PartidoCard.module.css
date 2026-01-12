@@ -1,0 +1,134 @@
+.card {
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-md);
+  box-shadow: var(--shadow-md);
+  transition: all var(--transition-normal);
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-md);
+  padding-bottom: var(--spacing-xs);
+  border-bottom: 2px solid var(--color-gray);
+}
+
+.fecha {
+  color: var(--color-gray-dark);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.estado {
+  padding: 4px 12px;
+  border-radius: var(--radius-xl);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-white);
+}
+
+.finalizado {
+  background: var(--color-gray-dark);
+}
+
+.en-curso {
+  background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.programado {
+  background: var(--gradient-primary);
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.partido {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: var(--spacing-md);
+  align-items: center;
+}
+
+.equipo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.logo {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.nombreEquipo {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--color-dark);
+  text-align: center;
+  line-height: 1.2;
+}
+
+.marcador {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.vs {
+  font-size: 1.5rem;
+  color: var(--color-gray-dark);
+  font-weight: 600;
+}
+
+.goles {
+  min-width: 40px;
+  text-align: center;
+}
+
+.separator {
+  color: var(--color-gray-dark);
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .partido {
+    gap: var(--spacing-sm);
+  }
+
+  .logo {
+    width: 50px;
+    height: 50px;
+  }
+
+  .nombreEquipo {
+    font-size: 0.85rem;
+  }
+
+  .marcador {
+    font-size: 1.5rem;
+  }
+
+  .goles {
+    min-width: 30px;
+  }
+}
