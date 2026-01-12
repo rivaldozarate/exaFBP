@@ -1,24 +1,31 @@
 import Head from 'next/head'
 import { useState } from 'react'
 import styles from '@/styles/Posiciones.module.css'
-import { posicionesMock } from '@/data/mockData'
+import { getPosiciones } from '@/lib/api'
+import { GetServerSideProps } from 'next'
 
-export default function Posiciones() {
+interface PosicionesProps {
+  posiciones: any[]
+}
+
+export default function Posiciones({ posiciones }: PosicionesProps) {
   const [grupoSeleccionado, setGrupoSeleccionado] = useState<string>('Todos')
 
   // Obtener grupos únicos
-  const grupos = ['Todos', ...Array.from(new Set(posicionesMock.map(p => p.grupo)))]
+  const grupos = ['Todos', ...Array.from(new Set(posiciones.map((p: any) => p.grupo)))]
 
   // Filtrar por grupo
   const posicionesFiltradas = grupoSeleccionado === 'Todos'
-    ? posicionesMock
-    : posicionesMock.filter(p => p.grupo === grupoSeleccionado)
+    ? posiciones
+    : posiciones.filter((p: any) => p.grupo === grupoSeleccionado)
 
   // Ordenar por puntos, diferencia de goles
-  const posicionesOrdenadas = [...posicionesFiltradas].sort((a, b) => {
-    if (b.puntos !== a.puntos) return b.puntos - a.puntos
-    if (b.diferencia_goles !== a.diferencia_goles) return b.diferencia_goles - a.diferencia_goles
-    return b.goles_favor - a.goles_favor
+  const posicionesOrdenadas = [...posicionesFiltradas].sort((a: any, b: any) => {
+    if (b.pts !== a.pts) return b.pts - a.pts
+    const difA = a.gf - a.gc
+    const difB = b.gf - b.gc
+    if (difB !== difA) return difB - difA
+    return b.gf - a.gf
   })
 
   return (
@@ -67,43 +74,46 @@ export default function Posiciones() {
               </tr>
             </thead>
             <tbody>
-              {posicionesOrdenadas.map((posicion, index) => (
-                <tr 
-                  key={posicion.id} 
-                  className={`${styles.row} ${index < 2 ? styles.rowClasificado : ''}`}
-                >
-                  <td className={styles.tdPos}>
-                    <span className={styles.posicion}>{index + 1}</span>
-                  </td>
-                  <td className={styles.tdEquipo}>
-                    <div className={styles.equipoInfo}>
-                      <img 
-                        src={posicion.logo} 
-                        alt={posicion.equipo} 
-                        className={styles.logo}
-                      />
-                      <div className={styles.equipoNombre}>
-                        <span className={styles.nombre}>{posicion.equipo}</span>
-                        <span className={styles.grupo}>Grupo {posicion.grupo}</span>
+              {posicionesOrdenadas.map((posicion: any, index: number) => {
+                const diferenciaGoles = posicion.gf - posicion.gc
+                return (
+                  <tr 
+                    key={posicion.id} 
+                    className={`${styles.row} ${index < 2 ? styles.rowClasificado : ''}`}
+                  >
+                    <td className={styles.tdPos}>
+                      <span className={styles.posicion}>{index + 1}</span>
+                    </td>
+                    <td className={styles.tdEquipo}>
+                      <div className={styles.equipoInfo}>
+                        <img 
+                          src={posicion.equipos?.logo_url || 'https://via.placeholder.com/50'} 
+                          alt={posicion.equipos?.nombre || ''} 
+                          className={styles.logo}
+                        />
+                        <div className={styles.equipoNombre}>
+                          <span className={styles.nombre}>{posicion.equipos?.nombre || ''}</span>
+                          <span className={styles.grupo}>Grupo {posicion.grupo}</span>
+                        </div>
                       </div>
-                    </div>
-                  </td>
-                  <td className={styles.tdCenter}>{posicion.partidos_jugados}</td>
-                  <td className={styles.tdCenter}>{posicion.ganados}</td>
-                  <td className={styles.tdCenter}>{posicion.empatados}</td>
-                  <td className={styles.tdCenter}>{posicion.perdidos}</td>
-                  <td className={styles.tdCenter}>{posicion.goles_favor}</td>
-                  <td className={styles.tdCenter}>{posicion.goles_contra}</td>
-                  <td className={styles.tdCenter}>
-                    <span className={posicion.diferencia_goles >= 0 ? styles.dgPositivo : styles.dgNegativo}>
-                      {posicion.diferencia_goles > 0 ? '+' : ''}{posicion.diferencia_goles}
-                    </span>
-                  </td>
-                  <td className={styles.tdPts}>
-                    <span className={styles.puntos}>{posicion.puntos}</span>
-                  </td>
-                </tr>
-              ))}
+                    </td>
+                    <td className={styles.tdCenter}>{posicion.pj}</td>
+                    <td className={styles.tdCenter}>{posicion.pg}</td>
+                    <td className={styles.tdCenter}>{posicion.pe}</td>
+                    <td className={styles.tdCenter}>{posicion.pp}</td>
+                    <td className={styles.tdCenter}>{posicion.gf}</td>
+                    <td className={styles.tdCenter}>{posicion.gc}</td>
+                    <td className={styles.tdCenter}>
+                      <span className={diferenciaGoles >= 0 ? styles.dgPositivo : styles.dgNegativo}>
+                        {diferenciaGoles > 0 ? '+' : ''}{diferenciaGoles}
+                      </span>
+                    </td>
+                    <td className={styles.tdPts}>
+                      <span className={styles.puntos}>{posicion.pts}</span>
+                    </td>
+                  </tr>
+                )
+              })}
             </tbody>
           </table>
         </div>
@@ -123,4 +133,23 @@ export default function Posiciones() {
       </div>
     </>
   )
+}
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  try {
+    const posiciones = await getPosiciones()
+
+    return {
+      props: {
+        posiciones
+      }
+    }
+  } catch (error) {
+    console.error('Error cargando posiciones:', error)
+    return {
+      props: {
+        posiciones: []
+      }
+    }
+  }
 }

@@ -1,39 +1,24 @@
 import Head from 'next/head'
 import { useState } from 'react'
-// TODO: Create Noticias.module.css file in styles folder
-// import styles from '@/styles/Noticias.module.css'
-
-// Temporary inline styles object until CSS module is created
-const styles = {
-    header: 'bg-gradient-to-r from-blue-600 to-cyan-500 text-white py-16 text-center',
-    title: 'text-4xl font-bold mb-4',
-    subtitle: 'text-xl opacity-90',
-    filtros: 'flex flex-wrap gap-3 justify-center mb-8',
-    filtroBtn: 'px-6 py-2 rounded-full border-2 border-blue-500 text-blue-600 hover:bg-blue-500 hover:text-white transition-all',
-    filtroActivo: 'bg-blue-600 text-white border-blue-600',
-    noticiasGrid: 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12',
-    noNoticias: 'text-center py-12 text-gray-500',
-    newsletter: 'bg-gradient-to-r from-blue-600 to-cyan-500 rounded-2xl p-8 text-white text-center',
-    newsletterContent: 'max-w-2xl mx-auto',
-    newsletterTitle: 'text-2xl font-bold mb-3',
-    newsletterText: 'mb-6 opacity-90',
-    newsletterForm: 'flex flex-col sm:flex-row gap-3 justify-center',
-    newsletterInput: 'px-4 py-3 rounded-lg flex-1 max-w-md text-gray-900',
-    newsletterBtn: 'px-8 py-3 bg-white text-blue-600 font-semibold rounded-lg hover:bg-gray-100 transition-all'
-}
+import styles from '@/styles/Noticias.module.css'
 import NoticiaCard from '@/components/NoticiaCard'
-import { noticiasMock } from '@/data/mockData'
+import { getNoticias } from '@/lib/api'
+import { GetServerSideProps } from 'next'
 
-export default function Noticias() {
+interface NoticiasProps {
+  noticias: any[]
+}
+
+export default function Noticias({ noticias }: NoticiasProps) {
   const [categoriaSeleccionada, setCategoriaSeleccionada] = useState<string>('Todas')
 
   // Obtener categorías únicas
-  const categorias = ['Todas', ...Array.from(new Set(noticiasMock.map(n => n.categoria)))]
+  const categorias = ['Todas', ...Array.from(new Set(noticias.map((n: any) => n.categoria).filter(Boolean)))]
 
   // Filtrar noticias por categoría
   const noticiasFiltradas = categoriaSeleccionada === 'Todas'
-    ? noticiasMock
-    : noticiasMock.filter(n => n.categoria === categoriaSeleccionada)
+    ? noticias
+    : noticias.filter((n: any) => n.categoria === categoriaSeleccionada)
 
   return (
     <>
@@ -70,8 +55,15 @@ export default function Noticias() {
           </div>
         ) : (
           <div className={styles.noticiasGrid}>
-            {noticiasFiltradas.map(noticia => (
-              <NoticiaCard key={noticia.id} {...noticia} />
+            {noticiasFiltradas.map((noticia: any) => (
+              <NoticiaCard 
+                key={noticia.id}
+                titulo={noticia.titulo}
+                contenido={noticia.contenido}
+                imagen={noticia.imagen_url || 'https://via.placeholder.com/400x250'}
+                fecha={noticia.fecha}
+                categoria={noticia.categoria}
+              />
             ))}
           </div>
         )}
@@ -96,4 +88,23 @@ export default function Noticias() {
       </div>
     </>
   )
+}
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  try {
+    const noticias = await getNoticias()
+
+    return {
+      props: {
+        noticias
+      }
+    }
+  } catch (error) {
+    console.error('Error cargando noticias:', error)
+    return {
+      props: {
+        noticias: []
+      }
+    }
+  }
 }

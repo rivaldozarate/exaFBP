@@ -2,35 +2,40 @@ import Head from 'next/head'
 import { useState } from 'react'
 import styles from '@/styles/Resultados.module.css'
 import PartidoCard from '@/components/PartidoCard'
-import { partidosMock } from '@/data/mockData'
+import { getPartidos } from '@/lib/api'
+import { GetServerSideProps } from 'next'
 
-export default function Resultados() {
+interface ResultadosProps {
+  partidos: any[]
+}
+
+export default function Resultados({ partidos }: ResultadosProps) {
   const [filtroEstado, setFiltroEstado] = useState<string>('Todos')
   const [filtroGrupo, setFiltroGrupo] = useState<string>('Todos')
 
   // Obtener grupos únicos
-  const grupos = ['Todos', ...Array.from(new Set(partidosMock.map(p => p.grupo || 'Sin grupo')))]
+  const grupos = ['Todos', ...Array.from(new Set(partidos.map((p: any) => p.grupo || 'Sin grupo')))]
 
   // Filtrar partidos
-  let partidosFiltrados = partidosMock
+  let partidosFiltrados = partidos
 
   if (filtroEstado !== 'Todos') {
-    partidosFiltrados = partidosFiltrados.filter(p => p.estado === filtroEstado)
+    partidosFiltrados = partidosFiltrados.filter((p: any) => p.estado === filtroEstado)
   }
 
   if (filtroGrupo !== 'Todos') {
-    partidosFiltrados = partidosFiltrados.filter(p => p.grupo === filtroGrupo)
+    partidosFiltrados = partidosFiltrados.filter((p: any) => p.grupo === filtroGrupo)
   }
 
   // Agrupar por fecha
-  const partidosPorFecha = partidosFiltrados.reduce((acc, partido) => {
+  const partidosPorFecha = partidosFiltrados.reduce((acc: any, partido: any) => {
     const fecha = partido.fecha
     if (!acc[fecha]) {
       acc[fecha] = []
     }
     acc[fecha].push(partido)
     return acc
-  }, {} as Record<string, typeof partidosMock>)
+  }, {} as Record<string, any[]>)
 
   return (
     <>
@@ -88,20 +93,20 @@ export default function Resultados() {
             <p>No hay partidos con los filtros seleccionados</p>
           </div>
         ) : (
-          Object.entries(partidosPorFecha).map(([fecha, partidos]) => (
+          (Object.entries(partidosPorFecha) as [string, any[]][]).map(([fecha, partidos]) => (
             <div key={fecha} className={styles.fechaGroup}>
               <h2 className={styles.fechaTitulo}>
                 <span className={styles.fechaIcon}>📅</span>
                 {fecha}
               </h2>
               <div className={styles.partidosGrid}>
-                {partidos.map(partido => (
+                {partidos.map((partido: any) => (
                   <PartidoCard 
                     key={partido.id}
-                    equipoLocal={partido.equipo_local}
-                    logoLocal={partido.logo_local}
-                    equipoVisitante={partido.equipo_visitante}
-                    logoVisitante={partido.logo_visitante}
+                    equipoLocal={partido.equipo_local?.nombre || ''}
+                    logoLocal={partido.equipo_local?.logo_url || ''}
+                    equipoVisitante={partido.equipo_visitante?.nombre || ''}
+                    logoVisitante={partido.equipo_visitante?.logo_url || ''}
                     golesLocal={partido.goles_local ?? undefined}
                     golesVisitante={partido.goles_visitante ?? undefined}
                     fecha={partido.fecha}
@@ -117,26 +122,26 @@ export default function Resultados() {
         {/* Estadísticas rápidas */}
         <div className={styles.stats}>
           <div className={styles.statCard}>
-            <div className={styles.statNumber}>{partidosMock.length}</div>
+            <div className={styles.statNumber}>{partidos.length}</div>
             <div className={styles.statLabel}>Total Partidos</div>
           </div>
           <div className={styles.statCard}>
             <div className={styles.statNumber}>
-              {partidosMock.filter(p => p.estado === 'finalizado').length}
+              {partidos.filter((p: any) => p.estado === 'finalizado').length}
             </div>
             <div className={styles.statLabel}>Finalizados</div>
           </div>
           <div className={styles.statCard}>
             <div className={styles.statNumber}>
-              {partidosMock.filter(p => p.estado === 'programado').length}
+              {partidos.filter((p: any) => p.estado === 'programado').length}
             </div>
             <div className={styles.statLabel}>Por Jugar</div>
           </div>
           <div className={styles.statCard}>
             <div className={styles.statNumber}>
-              {partidosMock
-                .filter(p => p.goles_local !== null && p.goles_visitante !== null)
-                .reduce((total, p) => total + (p.goles_local || 0) + (p.goles_visitante || 0), 0)}
+              {partidos
+                .filter((p: any) => p.goles_local !== null && p.goles_visitante !== null)
+                .reduce((total: number, p: any) => total + (p.goles_local || 0) + (p.goles_visitante || 0), 0)}
             </div>
             <div className={styles.statLabel}>Goles Totales</div>
           </div>
@@ -144,4 +149,23 @@ export default function Resultados() {
       </div>
     </>
   )
+}
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  try {
+    const partidos = await getPartidos()
+
+    return {
+      props: {
+        partidos
+      }
+    }
+  } catch (error) {
+    console.error('Error cargando partidos:', error)
+    return {
+      props: {
+        partidos: []
+      }
+    }
+  }
 }

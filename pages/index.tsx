@@ -3,21 +3,26 @@ import Link from 'next/link'
 import styles from '@/styles/Home.module.css'
 import PartidoCard from '@/components/PartidoCard'
 import NoticiaCard from '@/components/NoticiaCard'
-import { partidosMock, noticiasMock, jugadoresMock } from '@/data/mockData'
+import { getPartidos, getNoticias, getGoleadores } from '@/lib/api'
+import { GetServerSideProps } from 'next'
 
-export default function Home() {
-  // Obtener los próximos 3 partidos
-  const proximosPartidos = partidosMock
-    .filter(p => p.estado === 'programado' || p.estado === 'en-curso')
+interface HomeProps {
+  partidos: any[]
+  noticias: any[]
+  goleadores: any[]
+}
+
+export default function Home({ partidos, noticias, goleadores }: HomeProps) {
+  // Filtrar próximos 3 partidos
+  const proximosPartidos = partidos
+    .filter((p: any) => p.estado === 'programado' || p.estado === 'en-curso')
     .slice(0, 3)
 
-  // Obtener las últimas 3 noticias
-  const ultimasNoticias = noticiasMock.slice(0, 3)
+  // Últimas 3 noticias
+  const ultimasNoticias = noticias.slice(0, 3)
 
-  // Obtener top 3 goleadores
-  const topGoleadores = jugadoresMock
-    .sort((a, b) => (b.goles || 0) - (a.goles || 0))
-    .slice(0, 3)
+  // Top 3 goleadores
+  const topGoleadores = goleadores.slice(0, 3)
 
   return (
     <>
@@ -59,13 +64,13 @@ export default function Home() {
             </Link>
           </div>
           <div className={styles.gridPartidos}>
-            {proximosPartidos.map(partido => (
+            {proximosPartidos.map((partido: any) => (
               <PartidoCard 
                 key={partido.id}
-                equipoLocal={partido.equipo_local}
-                logoLocal={partido.logo_local}
-                equipoVisitante={partido.equipo_visitante}
-                logoVisitante={partido.logo_visitante}
+                equipoLocal={partido.equipo_local?.nombre || ''}
+                logoLocal={partido.equipo_local?.logo_url || ''}
+                equipoVisitante={partido.equipo_visitante?.nombre || ''}
+                logoVisitante={partido.equipo_visitante?.logo_url || ''}
                 golesLocal={partido.goles_local ?? undefined}
                 golesVisitante={partido.goles_visitante ?? undefined}
                 fecha={partido.fecha}
@@ -87,20 +92,20 @@ export default function Home() {
             </Link>
           </div>
           <div className={styles.goleadoresGrid}>
-            {topGoleadores.map((jugador, index) => (
-              <div key={jugador.id} className={styles.goleadorCard}>
+            {topGoleadores.map((jugador: any, index: number) => (
+              <div key={jugador.id || jugador.jugador_id} className={styles.goleadorCard}>
                 <div className={styles.goleadorRank}>{index + 1}</div>
                 <img 
-                  src={jugador.foto} 
+                  src={jugador.foto_url || jugador.foto || 'https://via.placeholder.com/100'} 
                   alt={jugador.nombre} 
                   className={styles.goleadorFoto}
                 />
                 <div className={styles.goleadorInfo}>
                   <h3 className={styles.goleadorNombre}>{jugador.nombre}</h3>
-                  <p className={styles.goleadorEquipo}>{jugador.equipo_nombre}</p>
+                  <p className={styles.goleadorEquipo}>{jugador.equipos?.nombre || jugador.equipo_nombre || ''}</p>
                   <div className={styles.goleadorGoles}>
                     <span className={styles.golesIcon}>⚽</span>
-                    <span className={styles.golesNumero}>{jugador.goles}</span>
+                    <span className={styles.golesNumero}>{jugador.total_goles || jugador.goles || 0}</span>
                   </div>
                 </div>
               </div>
@@ -119,8 +124,15 @@ export default function Home() {
             </Link>
           </div>
           <div className={styles.noticiasGrid}>
-            {ultimasNoticias.map(noticia => (
-              <NoticiaCard key={noticia.id} {...noticia} />
+            {ultimasNoticias.map((noticia: any) => (
+              <NoticiaCard 
+                key={noticia.id} 
+                titulo={noticia.titulo}
+                contenido={noticia.contenido}
+                imagen={noticia.imagen_url || 'https://via.placeholder.com/400x250'}
+                fecha={noticia.fecha}
+                categoria={noticia.categoria}
+              />
             ))}
           </div>
         </div>
@@ -147,4 +159,31 @@ export default function Home() {
       </section>
     </>
   )
+}
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  try {
+    const [partidos, noticias, goleadores] = await Promise.all([
+      getPartidos(),
+      getNoticias(),
+      getGoleadores()
+    ])
+
+    return {
+      props: {
+        partidos,
+        noticias,
+        goleadores
+      }
+    }
+  } catch (error) {
+    console.error('Error cargando datos:', error)
+    return {
+      props: {
+        partidos: [],
+        noticias: [],
+        goleadores: []
+      }
+    }
+  }
 }
